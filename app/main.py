@@ -3,7 +3,22 @@ import sys
 # import pyparsing - available if you need it!
 # import lark - available if you need it!
 
+def match_alternation(input_line:str, pattern: str) -> bool:
+    if "(" in pattern and ")" in pattern:
+        start = pattern.index("(")
+        end = pattern.index(")")
+        before = pattern[:start]
+        after = pattern[end+1:]
+        options = pattern[start+1:end].split("|")
+        return any(match_pattern(input_line, before + opt + after) for opt in options)
+    else:
+        return any(match_pattern(input_line, p.strip()) for p in pattern.split("|"))
+
 def match_pattern(input_line: str, pattern: str) -> bool:
+    if "|" in pattern or ("(" in pattern and ")" in pattern):
+        return match_alternation(input_line, pattern)
+    
+    
     if not pattern:
         return True
     if not input_line:
