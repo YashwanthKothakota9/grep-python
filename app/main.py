@@ -20,6 +20,8 @@ def match_pattern(input_line: str, pattern: str) -> bool:
         while i < len(input_line) and input_line[i] == pattern[0]:
             i += 1
         return match_pattern(input_line[i:], pattern[2:])
+    elif len(pattern) > 1 and pattern[1] == "?":
+        return match_pattern(input_line, pattern[2:]) or (input_line[0] == pattern[0] and match_pattern(input_line[1:], pattern[2:]))
     elif pattern[0] == input_line[0]:
         return match_pattern(input_line[1:], pattern[1:])
     elif pattern[:2] == "\\d":
