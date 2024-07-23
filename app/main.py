@@ -10,7 +10,10 @@ def match_pattern(input_line: str, pattern: str) -> bool:
         return True
     if not input_line:
         return False
-    if pattern[0] == "^":
+    
+    if pattern[-1] == "$":
+        return input_line.endswith(pattern[0:-1])
+    elif pattern[0] == "^":
         return input_line.startswith(pattern[1:])
     elif pattern[0] == input_line[0]:
         return match_pattern(input_line[1:], pattern[1:])
