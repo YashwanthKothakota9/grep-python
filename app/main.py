@@ -3,11 +3,6 @@ import sys
 # import pyparsing - available if you need it!
 # import lark - available if you need it!
 
-class Pattern:
-    DIGIT = '\\d'
-    ALNUM = '\\w'
-
-
 def match_pattern(input_line: str, pattern: str) -> bool:
     if not input_line and not pattern:
         return True
@@ -15,7 +10,9 @@ def match_pattern(input_line: str, pattern: str) -> bool:
         return True
     if not input_line:
         return False
-    if pattern[0] == input_line[0]:
+    if pattern[0] == "^":
+        return input_line.startswith(pattern[1:])
+    elif pattern[0] == input_line[0]:
         return match_pattern(input_line[1:], pattern[1:])
     elif pattern[:2] == "\\d":
         # In simpler terms, this code is doing the following:
