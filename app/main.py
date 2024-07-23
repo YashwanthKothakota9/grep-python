@@ -14,15 +14,18 @@ def match_pattern(input_line: str, pattern: str) -> bool:
     elif pattern[0] == "^":
         return input_line.startswith(pattern[1:])
     elif len(pattern) > 1 and pattern[1] == "+":
-        if pattern[0] != input_line[0]:
+        if pattern[0] != input_line[0] and pattern[0] != ".":
             return False
         i = 1
-        while i < len(input_line) and input_line[i] == pattern[0]:
+        while i < len(input_line) and (input_line[i] == pattern[0] or pattern[0] == "."):
             i += 1
         return match_pattern(input_line[i:], pattern[2:])
     elif len(pattern) > 1 and pattern[1] == "?":
-        return match_pattern(input_line, pattern[2:]) or (input_line[0] == pattern[0] and match_pattern(input_line[1:], pattern[2:]))
-    elif pattern[0] == input_line[0]:
+        return match_pattern(input_line, pattern[2:]) or (
+            (input_line[0] == pattern[0] or pattern[0] == '.') and 
+            match_pattern(input_line[1:], pattern[2:])
+        )
+    elif pattern[0] == "." or pattern[0] == input_line[0]:
         return match_pattern(input_line[1:], pattern[1:])
     elif pattern[:2] == "\\d":
         for i, char in enumerate(input_line):
